@@ -1,0 +1,12 @@
+package model
+
+type Book struct {
+	/*Id    int64  `xorm:"pk autoincr int(64)" form:"id" json:"id"`
+	Title string `xorm:"varchar(40)" json:"title" form:"title"`
+	Score int64  `xorm:"pk autoincr int(64)" form:"score" json:"score"`
+	Memo string `xorm:"varchar(40)" json:"memo" form:"memo"`*/
+	Id    int `json:"id" xorm:"pk autoincr int(64)"`
+	Title string
+	Score int
+	Memo  string
+}
