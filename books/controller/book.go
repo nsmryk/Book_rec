@@ -3,8 +3,8 @@ package controller
 import (
     "github.com/gin-gonic/gin"
     "net/http"
-    "books/model"
     "books/service"
+    "books/model"
     "strconv"
 )
 
@@ -22,9 +22,7 @@ func BookAdd(c *gin.Context) {
         c.String(http.StatusInternalServerError, "Server Error")
         return
     }
-    c.JSON(http.StatusCreated, gin.H{
-        "status": "ok",
-    })
+    
 }
 
 func BookList(c *gin.Context)  {
@@ -69,7 +67,5 @@ func BookDelete(c *gin.Context){
         c.String(http.StatusInternalServerError, "Server Error")
         return
     }
-    c.JSON(http.StatusCreated, gin.H{
-        "status": "ok",
-    })
+    
 }

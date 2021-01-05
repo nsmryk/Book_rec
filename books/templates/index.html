@@ -22,14 +22,19 @@
  <h1>The list of books I've read</h1>
 
  <section>
-
+<p><a href="/book/new">Add new book</a></p>
 <ul>
-    {{range .response}}
-    <li>{{.}}</li>
+    {{range $index, $book := .result}}
+    <li>{{$book.Id}}:{{$book.Title}} {{$book.Score}}:{{$book.Memo}} </li>
+    <a href="/">
+        <form method="post" action="/book/v1/delete">
+            <input type="submit" value="del">
+            <input type="hidden" name="id" value="{{ $book.Id}}">
+        </form>
+    </a>
     {{end}}
 </ul>
 
- <p>{{.response}}</p>
  </section>
  </article>
  <!----- /main ----->
