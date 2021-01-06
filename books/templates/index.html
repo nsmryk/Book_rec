@@ -26,12 +26,10 @@
 <ul>
     {{range $index, $book := .result}}
     <li>{{$book.Id}}:{{$book.Title}} {{$book.Score}}:{{$book.Memo}} </li>
-    <a href="/">
         <form method="post" action="/book/v1/delete">
-            <input type="submit" value="del">
-            <input type="hidden" name="id" value="{{ $book.Id}}">
+            <input type="submit" value="delete">
+            <input type="hidden" name="id" value="{{ $book.Id }}">
         </form>
-    </a>
     {{end}}
 </ul>
 
@@ -40,7 +38,7 @@
  <!----- /main ----->
  
  <!----- footer ----->
- <footer>フッター</footer>
+ <footer></footer>
  <!----- /footer ----->
  </body>
 </html>

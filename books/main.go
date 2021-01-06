@@ -28,6 +28,10 @@ func main() {
         // テンプレートを使って、値を置き換えてHTMLレスポンスを応答
         c.HTML(http.StatusOK, "add.html", gin.H{})
     })
+    engine.GET("/book/delete", func(c *gin.Context) {
+        // テンプレートを使って、値を置き換えてHTMLレスポンスを応答
+        c.HTML(http.StatusOK, "delete.html", gin.H{})
+    })
     bookEngine := engine.Group("/book")
     {
         v1 := bookEngine.Group("/v1")
@@ -45,12 +49,7 @@ func main() {
             v1.PUT("/update", controller.BookUpdate)
             v1.POST("/delete", func(c *gin.Context) {
                 controller.BookDelete(c)
-                /*ctrl := service.BookService{}
-                result := ctrl.GetBookList()
-                c.HTML(http.StatusOK, "index.html", gin.H{
-                    // htmlに渡す変数を定義
-                    "result": result,
-                })*/
+                c.HTML(http.StatusOK, "delete.html", gin.H{})
             })
         }
     }
