@@ -25,14 +25,17 @@
 <p><a href="/book/new">Add new book</a></p>
 <ul>
     {{range $index, $book := .result}}
-    <li>{{$book.Id}}:{{$book.Title}} {{$book.Score}}:{{$book.Memo}} </li>
+    <li>{{$book.Id}}:{{$book.Title}} {{$book.Score}}:{{$book.Memo}}
         <form method="post" action="/book/v1/delete">
             <input type="submit" value="delete">
             <input type="hidden" name="id" value="{{ $book.Id }}">
         </form>
+        <p><a href="/book/update">update</a></p>
+    </li>
+
     {{end}}
 </ul>
-
+<p>{{.c}}</p>
  </section>
  </article>
  <!----- /main ----->

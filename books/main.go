@@ -7,13 +7,16 @@ import (
     "books/service"
 	"books/middleware"
     "net/http"
-    //"fmt"
+   // "fmt"
 )
 func main() {
 	engine:= gin.Default()
 
     engine.LoadHTMLGlob("templates/*.html")
+    // ミドルウェア
+    engine.Use(middleware.RecordUaAndTime)
     engine.GET("/", func(c *gin.Context) {
+        
         ctrl := service.BookService{}
         result := ctrl.GetBookList()
         c.HTML(http.StatusOK, "index.html", gin.H{
@@ -21,16 +24,22 @@ func main() {
             "result": result,
         })
     })
-    // ミドルウェア
-    engine.Use(middleware.RecordUaAndTime)
-    // CRUD 書籍
+    // CRUD 
     engine.GET("/book/new", func(c *gin.Context) {
         // テンプレートを使って、値を置き換えてHTMLレスポンスを応答
         c.HTML(http.StatusOK, "add.html", gin.H{})
     })
     engine.GET("/book/delete", func(c *gin.Context) {
-        // テンプレートを使って、値を置き換えてHTMLレスポンスを応答
         c.HTML(http.StatusOK, "delete.html", gin.H{})
+    })
+    engine.GET("/book/update", func(c *gin.Context) {
+        c.HTML(http.StatusOK, "update.html", gin.H{})
+    })
+    engine.POST("/book/update", func(c *gin.Context) {
+        result := controller.BookGet(c)
+        c.HTML(http.StatusOK, "update.html", gin.H{
+            "result": result,
+        })
     })
     bookEngine := engine.Group("/book")
     {
@@ -46,7 +55,12 @@ func main() {
                 })
             })
             v1.GET("/list", controller.BookList)
-            v1.PUT("/update", controller.BookUpdate)
+            v1.POST("/update", func(c *gin.Context) {
+                controller.BookUpdate(c)
+                c.HTML(http.StatusOK, "update.html", gin.H{
+                    "message": "Update Succeed.",
+                })
+            })
             v1.POST("/delete", func(c *gin.Context) {
                 controller.BookDelete(c)
                 c.HTML(http.StatusOK, "delete.html", gin.H{})

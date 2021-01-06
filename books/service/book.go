@@ -18,6 +18,12 @@ func (BookService) SetBook(book *model.Book) error {
     return nil
 }
 
+func (BookService) GetById(id int64) *model.Book {
+    
+    var res model.Book
+    DbEngine.Where(model.Book{Id: id}).Find(&res)
+    return &res
+}
 
 func (BookService) GetBookList() []model.Book {
     tests := make([]model.Book, 0)

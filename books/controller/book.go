@@ -8,6 +8,14 @@ import (
     "strconv"
 )
 
+func BookGet(c *gin.Context) *model.Book {
+    id := c.PostForm("id")
+    intId, _ := strconv.ParseInt(id, 10, 0)
+    
+    bookService :=service.BookService{}
+    res := bookService.GetById(int64(intId))
+    return res
+}
 
 func BookAdd(c *gin.Context) {
      book := model.Book{}
@@ -49,9 +57,7 @@ func BookUpdate(c *gin.Context){
         c.String(http.StatusInternalServerError, "Server Error")
         return
     }
-    c.JSON(http.StatusCreated, gin.H{
-        "status": "ok",
-    })
+    
 }
 
 func BookDelete(c *gin.Context){
