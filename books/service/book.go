@@ -34,7 +34,12 @@ func (BookService) GetBookList() []model.Book {
     return tests
 }
 
-func (BookService) UpdateBook(newBook *model.Book) error {
+func (BookService) UpdateBook(id int64,title string, score int64,memo string) error {
+    newBook := new(model.Book)
+    newBook.Id = id
+    newBook.Title = title
+    newBook.Score = score
+    newBook.Memo = memo
     _, err := DbEngine.Id(newBook.Id).Update(newBook)
     if err != nil {
         return err

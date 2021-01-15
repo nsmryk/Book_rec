@@ -44,15 +44,9 @@ func BookList(c *gin.Context)  {
 	
 }
 
-func BookUpdate(c *gin.Context){
-    book := model.Book{}
-    err := c.Bind(&book)
-    if err != nil{
-        c.String(http.StatusBadRequest, "Bad request")
-        return
-    }
+func BookUpdate(id int64,title string, score int64,memo string,c *gin.Context){
     bookService :=service.BookService{}
-    err = bookService.UpdateBook(&book)
+    err := bookService.UpdateBook(id,title,score,memo)
     if err != nil{
         c.String(http.StatusInternalServerError, "Server Error")
         return

@@ -7,6 +7,7 @@ import (
     "books/service"
 	"books/middleware"
     "net/http"
+    "strconv"
    // "fmt"
 )
 func main() {
@@ -32,15 +33,18 @@ func main() {
     engine.GET("/book/delete", func(c *gin.Context) {
         c.HTML(http.StatusOK, "delete.html", gin.H{})
     })
-    engine.GET("/book/update", func(c *gin.Context) {
-        c.HTML(http.StatusOK, "update.html", gin.H{})
+   /* engine.GET("/book/update", func(c *gin.Context) {
+        id := c.Param("id")
+        c.HTML(http.StatusOK, "update.html", gin.H{
+            "id": id,
+        })
     })
     engine.POST("/book/update", func(c *gin.Context) {
         result := controller.BookGet(c)
         c.HTML(http.StatusOK, "update.html", gin.H{
             "result": result,
         })
-    })
+    })*/
     bookEngine := engine.Group("/book")
     {
         v1 := bookEngine.Group("/v1")
@@ -55,11 +59,19 @@ func main() {
                 })
             })
             v1.GET("/list", controller.BookList)
-            v1.POST("/update", func(c *gin.Context) {
-                controller.BookUpdate(c)
+            v1.POST("/update/:id", func(c *gin.Context) {
+                id := c.Param("id")
+                intId, _ := strconv.ParseInt(id, 10, 0)
+                title := c.PostForm("title")
+                scorestr := c.PostForm("score")
+                score,_ := strconv.ParseInt(scorestr, 10, 0)
+                memo := c.PostForm("memo")
                 c.HTML(http.StatusOK, "update.html", gin.H{
-                    "message": "Update Succeed.",
+                    "message": "Edit your data",
+                    "id" : intId,
                 })
+                controller.BookUpdate(intId,title,score,memo,c)
+                
             })
             v1.POST("/delete", func(c *gin.Context) {
                 controller.BookDelete(c)

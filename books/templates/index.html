@@ -31,7 +31,12 @@
             <input type="submit" value="delete">
             <input type="hidden" name="id" value="{{ $book.Id }}">
         </form>
-        <p><a href="/book/update">update</a></p>
+        <p>
+            <form method="post" action="/book/v1/update/{{ $book.Id }}">
+                <input type="submit" value="update">
+                <input type="hidden" name="id" value="{{ $book.Id }}">
+            </form>
+        </p>
     </li>
 
     {{end}}

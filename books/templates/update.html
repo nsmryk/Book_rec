@@ -22,9 +22,8 @@
  <h1>Update</h1>
  <p>{{.message}}</p>
  <section>
-    <form method="post" action="/book/v1/update">
-        <p>id :{{.result.Id}} </p>
-        <input type="int" name="id">
+    <form method="post" action="/book/v1/update/{{.id}}">
+        <!--<p>id :{{.result.Id}} </p>-->
         <p>title : {{.result.Title}} </p>
         <input type="text" name="title">
         <p>score: {{.result.Score}} </p>
