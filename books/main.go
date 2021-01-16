@@ -23,11 +23,13 @@ func main() {
         ctrl := service.BookService{}
         result := ctrl.GetBookList()
         total, month := controller.BookCount(c)
+        books := controller.BookRank(c)
         c.HTML(http.StatusOK, "index.html", gin.H{
              // htmlに渡す変数を定義
             "result": result,
             "month": month,
             "total": total,
+            "ranking":books,
         })
     })
     // CRUD 

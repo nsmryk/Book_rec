@@ -41,6 +41,11 @@ func (BookService) CountBooks(date time.Time) int64 {
     total, _ := DbEngine.Where("date >=? AND date <=?",t_bgn ,t_end).Count(book)
     return total
 }
+func (BookService) GetBookRanking() []model.Book {
+    book := make([]model.Book, 0)
+    DbEngine.Desc("score").Asc("title").Limit(5, 0).Find(&book)
+    return book
+}
 func (BookService) UpdateBook(id int64,title string, score int64, memo string,date time.Time) error {
     newBook := new(model.Book)
     newBook.Id = id

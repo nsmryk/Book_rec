@@ -29,7 +29,11 @@ func BookCount(c *gin.Context) ([]int64,[]string) {
     }    
     return res,month
 }
-
+func BookRank(c *gin.Context) ([]model.Book) {
+    bookService :=service.BookService{}
+    books := bookService.GetBookRanking()
+    return books
+}
 func BookAdd(c *gin.Context) {
      book := model.Book{}
      err := c.Bind(&book)

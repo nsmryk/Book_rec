@@ -40,12 +40,12 @@
 
     {{end}}
 </ul>
-
-<p>the number of books you read : {{.total}}</p>
-
-
- 
-
+<ul>
+    {{range $index, $rank := .ranking}}
+    <li>{{$rank.Title}}:{{$rank.Score}}
+    </li>
+    {{end}}
+</ul>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 <canvas id="bar-chart"></canvas>
 <script>
