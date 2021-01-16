@@ -6,6 +6,7 @@ import (
     "books/service"
     "books/model"
     "strconv"
+    "fmt"
 )
 
 func BookGet(c *gin.Context) *model.Book {
@@ -44,12 +45,13 @@ func BookList(c *gin.Context)  {
 	
 }
 
-func BookUpdate(id int64,title string, score int64,memo string,c *gin.Context){
+func BookUpdate(id int64, title string, score int64, memo string, c *gin.Context){
     bookService :=service.BookService{}
     err := bookService.UpdateBook(id,title,score,memo)
     if err != nil{
-        c.String(http.StatusInternalServerError, "Server Error")
-        return
+        c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", err))
+        //c.String(http.StatusInternalServerError, "Server Error")
+        return 
     }
     
 }

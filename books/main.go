@@ -30,21 +30,13 @@ func main() {
         // テンプレートを使って、値を置き換えてHTMLレスポンスを応答
         c.HTML(http.StatusOK, "add.html", gin.H{})
     })
-    engine.GET("/book/delete", func(c *gin.Context) {
-        c.HTML(http.StatusOK, "delete.html", gin.H{})
-    })
-   /* engine.GET("/book/update", func(c *gin.Context) {
+    engine.GET("/book/update/:id", func(c *gin.Context) {
         id := c.Param("id")
+        intId, _ := strconv.ParseInt(id, 10, 64)
         c.HTML(http.StatusOK, "update.html", gin.H{
-            "id": id,
+            "id": intId,
         })
     })
-    engine.POST("/book/update", func(c *gin.Context) {
-        result := controller.BookGet(c)
-        c.HTML(http.StatusOK, "update.html", gin.H{
-            "result": result,
-        })
-    })*/
     bookEngine := engine.Group("/book")
     {
         v1 := bookEngine.Group("/v1")
@@ -61,13 +53,13 @@ func main() {
             v1.GET("/list", controller.BookList)
             v1.POST("/update/:id", func(c *gin.Context) {
                 id := c.Param("id")
-                intId, _ := strconv.ParseInt(id, 10, 0)
+                intId, _ := strconv.ParseInt(id, 10, 64)
                 title := c.PostForm("title")
                 scorestr := c.PostForm("score")
-                score,_ := strconv.ParseInt(scorestr, 10, 0)
+                score, _ := strconv.ParseInt(scorestr, 10, 64)
                 memo := c.PostForm("memo")
                 c.HTML(http.StatusOK, "update.html", gin.H{
-                    "message": "Edit your data",
+                    "message": "Changed your Data",
                     "id" : intId,
                 })
                 controller.BookUpdate(intId,title,score,memo,c)
