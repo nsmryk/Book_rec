@@ -8,7 +8,7 @@ import (
 	"books/middleware"
     "net/http"
     "strconv"
-   // "fmt"
+    "time"
 )
 func main() {
 	engine:= gin.Default()
@@ -33,8 +33,11 @@ func main() {
     engine.GET("/book/update/:id", func(c *gin.Context) {
         id := c.Param("id")
         intId, _ := strconv.ParseInt(id, 10, 64)
+        datestr := c.Param("date")
+        date, _ := time.Parse(datestr,"")
         c.HTML(http.StatusOK, "update.html", gin.H{
             "id": intId,
+            "date": date,
         })
     })
     bookEngine := engine.Group("/book")
@@ -58,11 +61,13 @@ func main() {
                 scorestr := c.PostForm("score")
                 score, _ := strconv.ParseInt(scorestr, 10, 64)
                 memo := c.PostForm("memo")
+                datestr := c.PostForm("date")
+                date, _ := time.Parse(datestr,"")
                 c.HTML(http.StatusOK, "update.html", gin.H{
                     "message": "Changed your Data",
                     "id" : intId,
                 })
-                controller.BookUpdate(intId,title,score,memo,c)
+                controller.BookUpdate(intId,title,score,memo,date,c)
                 
             })
             v1.POST("/delete", func(c *gin.Context) {

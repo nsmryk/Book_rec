@@ -25,7 +25,7 @@
 <p><a href="/book/new">Add new book</a></p>
 <ul>
     {{range $index, $book := .result}}
-    <li>{{$book.Title}} {{$book.Score}}:{{$book.Memo}}
+    <li>{{$book.Title}} {{$book.Score}}:{{$book.Memo}}:{{$book.Date}}
         <p>{{$book.Id}}</p>
         <form method="post" action="/book/v1/delete">
             <input type="submit" value="delete">

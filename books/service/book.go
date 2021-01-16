@@ -2,6 +2,7 @@ package service
 
 import (
     "books/model"
+    "time"
 )
 
 type BookService struct {}
@@ -27,19 +28,20 @@ func (BookService) GetById(id int64) *model.Book {
 
 func (BookService) GetBookList() []model.Book {
     tests := make([]model.Book, 0)
-    err := DbEngine.Distinct("id", "title", "score", "memo").Limit(10, 0).Find(&tests)
+    err := DbEngine.Distinct("id", "title", "score", "memo","date").Limit(10, 0).Find(&tests)
     if err != nil {
         panic(err)
     }
     return tests
 }
 
-func (BookService) UpdateBook(id int64,title string, score int64, memo string) error {
+func (BookService) UpdateBook(id int64,title string, score int64, memo string,date time.Time) error {
     newBook := new(model.Book)
     newBook.Id = id
     newBook.Title = title
     newBook.Score = score
     newBook.Memo = memo
+    newBook.Date = date
     _, err := DbEngine.Id(id).Update(newBook)
     if err != nil {
         return err
