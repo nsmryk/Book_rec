@@ -13,10 +13,21 @@ import (
 func BookGet(c *gin.Context) *model.Book {
     id := c.PostForm("id")
     intId, _ := strconv.ParseInt(id, 10, 0)
-    
     bookService :=service.BookService{}
     res := bookService.GetById(int64(intId))
     return res
+}
+func BookCount(c *gin.Context) ([]int64,[]string) {
+    date := time.Now().AddDate(0, -11, 0)
+    bookService :=service.BookService{}
+    res := []int64{}
+    month := []string{}
+    for i := 0; i< 12; i++{
+        res = append(res,bookService.CountBooks(date))
+        month = append(month,date.String()[0:7])
+        date = date.AddDate(0, 1, 0)       
+    }    
+    return res,month
 }
 
 func BookAdd(c *gin.Context) {

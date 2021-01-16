@@ -34,7 +34,13 @@ func (BookService) GetBookList() []model.Book {
     }
     return tests
 }
-
+func (BookService) CountBooks(date time.Time) int64 {   
+    book := new(model.Book)
+    t_bgn := time.Date(date.Year(),date.Month(),1, 0, 0, 0,    000000000, time.Local)
+    t_end := time.Date(date.Year(),date.Month(),1, 23, 59, 59, 999999999, time.Local).AddDate(0, 1, -1)
+    total, _ := DbEngine.Where("date >=? AND date <=?",t_bgn ,t_end).Count(book)
+    return total
+}
 func (BookService) UpdateBook(id int64,title string, score int64, memo string,date time.Time) error {
     newBook := new(model.Book)
     newBook.Id = id

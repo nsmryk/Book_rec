@@ -9,4 +9,5 @@ type Book struct {
 	Score int64  `form:"score" json:"score"`
 	Memo string `form:"memo" json:"memo"`
 	Date time.Time `xorm:"DateTime" form:"date" json:"date"`
+	DeletedDate time.Time `xorm:"deleted"`
 }

@@ -10,25 +10,32 @@ import (
     "strconv"
     "time"
 )
+
 func main() {
 	engine:= gin.Default()
 
     engine.LoadHTMLGlob("templates/*.html")
     // ミドルウェア
     engine.Use(middleware.RecordUaAndTime)
+    
     engine.GET("/", func(c *gin.Context) {
         
         ctrl := service.BookService{}
         result := ctrl.GetBookList()
+        total, month := controller.BookCount(c)
         c.HTML(http.StatusOK, "index.html", gin.H{
              // htmlに渡す変数を定義
             "result": result,
+            "month": month,
+            "total": total,
         })
     })
     // CRUD 
     engine.GET("/book/new", func(c *gin.Context) {
         // テンプレートを使って、値を置き換えてHTMLレスポンスを応答
-        c.HTML(http.StatusOK, "add.html", gin.H{})
+        c.HTML(http.StatusOK, "add.html", gin.H{
+            "message":"Add New Book",
+        })
     })
     engine.GET("/book/update/:id", func(c *gin.Context) {
         id := c.Param("id")
@@ -46,11 +53,8 @@ func main() {
         {
             v1.POST("/add", func(c *gin.Context) {
                 controller.BookAdd(c)
-                ctrl := service.BookService{}
-                result := ctrl.GetBookList()
-                c.HTML(http.StatusOK, "index.html", gin.H{
-                    // htmlに渡す変数を定義
-                    "result": result,
+                c.HTML(http.StatusOK, "add.html", gin.H{
+                    "message":"Go back TOP Page",
                 })
             })
             v1.GET("/list", controller.BookList)

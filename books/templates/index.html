@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
- <head>
- <meta charset="utf-8">
- <title>読書記録</title>
- <meta name="description" content="recordof reading">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <link rel="stylesheet" href="style.css">
- <!-- [if lt IE 9] -->
- <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
- <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>-->
- <!-- [endif] -->
- <script src="main.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>読書記録</title>
+    <meta name="description" content="recordof reading">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- [if lt IE 9] -->
+    <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>-->
+    <!-- [endif] -->
  </head>
  <body>
  <!----- header----->
@@ -41,9 +40,41 @@
 
     {{end}}
 </ul>
-<p>{{.c}}</p>
- </section>
- </article>
+
+<p>the number of books you read : {{.total}}</p>
+
+
+ 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+<canvas id="bar-chart"></canvas>
+<script>
+    var context = document.getElementById('bar-chart').getContext('2d');
+  var bar_chart = new Chart(context, {
+    type:'bar', // グラフのタイプを指定
+    data:{
+      labels: {{.month}},// グラフ下部のラベル
+      datasets:[
+        {label:'読んだ冊数', // データのラベル
+          data:{{.total}}, // グラフ化するデータの数値
+          borderColor:'rgb(255, 99, 132)', // 棒を囲う線の色
+          backgroundColor:'rgba(255, 99, 132, 0.2)'} // 棒の中の色
+      ]
+    },
+    options:{
+      scales:{
+        yAxes:[{
+          ticks:{
+            min:0, // グラフの最小値
+            max: 50 // グラフの最大値
+          }
+        }]
+      }
+    }
+  });
+</script>
+</section>
+</article>
  <!----- /main ----->
  
  <!----- footer ----->
