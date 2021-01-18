@@ -4,81 +4,165 @@
     <meta charset="utf-8">
     <title>読書記録</title>
     <meta name="description" content="recordof reading">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <!--<link rel="stylesheet" href="/static/style.css">-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style type="text/css" media="screen">
+        @import url("/static/style.css");
+    </style>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
+
     <!-- [if lt IE 9] -->
     <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>-->
     <!-- [endif] -->
- </head>
- <body>
- <!----- header----->
- <header>My record of reading</header>
- <!----- /header ----->
- 
- <!----- main ----->
- <article>
- <h1>The list of books I've read</h1>
-
- <section>
-<p><a href="/book/new">Add new book</a></p>
-<ul>
-    {{range $index, $book := .result}}
-    <li>{{$book.Title}} {{$book.Score}}:{{$book.Memo}}:{{$book.Date}}
-        <p>{{$book.Id}}</p>
-        <form method="post" action="/book/v1/delete">
-            <input type="submit" value="delete">
-            <input type="hidden" name="id" value="{{ $book.Id }}">
-        </form>
-        
-        <p>
-            <a href="/book/update/{{ $book.Id }}">
-                <button type="button">update</button>
-            </a>
-        </p>
-    </li>
-
-    {{end}}
-</ul>
-<ul>
-    {{range $index, $rank := .ranking}}
-    <li>{{$rank.Title}}:{{$rank.Score}}
-    </li>
-    {{end}}
-</ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
-<canvas id="bar-chart"></canvas>
-<script>
-    var context = document.getElementById('bar-chart').getContext('2d');
-  var bar_chart = new Chart(context, {
-    type:'bar', // グラフのタイプを指定
-    data:{
-      labels: {{.month}},// グラフ下部のラベル
-      datasets:[
-        {label:'読んだ冊数', // データのラベル
-          data:{{.total}}, // グラフ化するデータの数値
-          borderColor:'rgb(255, 99, 132)', // 棒を囲う線の色
-          backgroundColor:'rgba(255, 99, 132, 0.2)'} // 棒の中の色
-      ]
-    },
-    options:{
-      scales:{
-        yAxes:[{
-          ticks:{
-            min:0, // グラフの最小値
-            max: 50 // グラフの最大値
+    <style>
+        .bd-placeholder-img {
+          font-size: 1.125rem;
+          text-anchor: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+  
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
           }
-        }]
-      }
-    }
-  });
-</script>
-</section>
-</article>
- <!----- /main ----->
- 
- <!----- footer ----->
- <footer></footer>
- <!----- /footer ----->
- </body>
+        }
+      </style>
+ </head><body>
+<header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">About</h4>
+          <p class="text-muted">読んだ本を記録して感想を見返すことができます。ジャンルごとに分けたり表紙の写真を表示する機能を追加予定です。</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Contact</h4>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+            <li><a href="#" class="text-white">Like on Facebook</a></li>
+            <li><a href="#" class="text-white">Email me</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="/" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" stroke="currentColor" class="bi bi-book" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/></svg>
+        <pre> </pre><strong>読んだ本</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <div class = "ranking">
+        <h2>本のランキング</h2>
+        <ul class="list-group list-group-flush">
+            {{range $index, $rank := .ranking}}
+            <li class="list-group-item d-flex justify-content-between align-items-center">{{$rank.Title}}<span class="badge badge-primary badge-pill">{{$rank.Score}}</span></li>
+            {{end}}
+        </ul>
+      </div>
+      <div class = "graph">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+        <canvas id="bar-chart"></canvas>
+        <script>
+            var context = document.getElementById('bar-chart').getContext('2d');
+        var bar_chart = new Chart(context, {
+            type:'bar', // グラフのタイプを指定
+            data:{
+            labels: {{.month}},// グラフ下部のラベル
+            datasets:[
+                {label:'読んだ冊数', // データのラベル
+                data:{{.total}}, // グラフ化するデータの数値
+                borderColor:'rgb(255, 99, 132)', // 棒を囲う線の色
+                backgroundColor:'rgba(255, 99, 132, 0.2)'} // 棒の中の色
+            ]
+            },
+            options:{
+            scales:{
+                yAxes:[{
+                ticks:{
+                    min:0, // グラフの最小値
+                    max: 50 // グラフの最大値
+                }
+                }]
+            }
+            }
+        });
+        </script>
+      </div>
+      <p>
+        <a href="/book/new" class="btn btn-secondary my-2">add<pr>  </pr>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+          </svg>
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        {{range $index, $book := .result}}
+        <div class="col-md-4">
+          <h2>{{$book.Title}}</h2>
+          <p>{{$book.Score}}</p>
+          <div class="get"><p><a class="btn btn-secondary" href="/book/get/{{ $book.Id }}" role="button">View details &raquo;</a></p></div>
+          <div class = "delete">
+            <form method="post" action="/book/v1/delete">
+                <button type="submit" class="btn btn-secondary">delete
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                </button>
+                <input type="hidden" name="id" value="{{ $book.Id }}">
+            </form>
+            
+          </div>
+          <div class="update">
+            <p><a href="/book/update/{{ $book.Id }}" class="btn btn-secondary">edit 　<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+              </svg></a></p>
+          </div>
+        </div>
+        {{end}}
+      </div>
+  
+      <hr>
+  
+    </div> <!-- /container -->
+  </div>
+
+</main>
+
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+    </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/static/bootstrap.bundle.js"></script></body>
 </html>

@@ -3,6 +3,7 @@ package service
 import (
     "books/model"
     "time"
+    "fmt"
 )
 
 type BookService struct {}
@@ -19,11 +20,13 @@ func (BookService) SetBook(book *model.Book) error {
     return nil
 }
 
-func (BookService) GetById(id int64) *model.Book {
-    
-    var res model.Book
-    DbEngine.Where(model.Book{Id: id}).Find(&res)
-    return &res
+func (BookService) GetById(id int64) model.Book {
+    res := model.Book{}
+    _ ,err := DbEngine.ID(id).Get(&res) 
+    if err != nil {
+        fmt.Printf("error: %s",err)
+    } 
+    return res
 }
 
 func (BookService) GetBookList() []model.Book {

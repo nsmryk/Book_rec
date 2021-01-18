@@ -9,11 +9,12 @@ import (
     "net/http"
     "strconv"
     "time"
+    //"fmt"
 )
 
 func main() {
 	engine:= gin.Default()
-
+    engine.Static("/static", "./static")
     engine.LoadHTMLGlob("templates/*.html")
     // ミドルウェア
     engine.Use(middleware.RecordUaAndTime)
@@ -30,6 +31,19 @@ func main() {
             "month": month,
             "total": total,
             "ranking":books,
+        })
+    })
+    engine.GET("/book/get/:id", func(c *gin.Context) {
+        id := c.Param("id")
+        intId, _ := strconv.ParseInt(id, 10, 64)
+        result := controller.BookGet(intId)
+        date := result.Date
+        year := date.Year()
+        month := date.Month()
+        c.HTML(http.StatusOK, "detail.html", gin.H{
+            "result": result,
+            "year":year,
+            "month":month,
         })
     })
     // CRUD 
@@ -56,7 +70,7 @@ func main() {
             v1.POST("/add", func(c *gin.Context) {
                 controller.BookAdd(c)
                 c.HTML(http.StatusOK, "add.html", gin.H{
-                    "message":"Go back TOP Page",
+                    "message":"Back to home page",
                 })
             })
             v1.GET("/list", controller.BookList)
@@ -70,7 +84,7 @@ func main() {
                 datestr := c.PostForm("date")
                 date, _ := time.Parse(datestr,"")
                 c.HTML(http.StatusOK, "update.html", gin.H{
-                    "message": "Changed your Data",
+                    "message": "Changed your Data.",
                     "id" : intId,
                 })
                 controller.BookUpdate(intId,title,score,memo,date,c)

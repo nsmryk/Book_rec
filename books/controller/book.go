@@ -10,11 +10,10 @@ import (
     "time"
 )
 
-func BookGet(c *gin.Context) *model.Book {
-    id := c.PostForm("id")
-    intId, _ := strconv.ParseInt(id, 10, 0)
+func BookGet(id int64) model.Book {
     bookService :=service.BookService{}
-    res := bookService.GetById(int64(intId))
+    res := bookService.GetById(id)
+    fmt.Printf("memo is %s",res.Memo)
     return res
 }
 func BookCount(c *gin.Context) ([]int64,[]string) {
